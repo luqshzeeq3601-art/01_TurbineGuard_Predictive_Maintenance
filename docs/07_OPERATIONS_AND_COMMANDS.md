@@ -9,7 +9,7 @@ Use PowerShell. T01 records the actual Python location; examples use python afte
 ## 2. Environment setup: T01
 
 ```powershell
-Set-Location 'C:\Users\ZeeqRyz\Desktop\Ai-ML\Machine Learning Projects\01_TurbineGuard_Predictive_Maintenance'
+Set-Location '01_TurbineGuard_Predictive_Maintenance'
 python --version
 git --version
 docker version

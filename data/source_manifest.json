@@ -1,0 +1,53 @@
+{
+  "dataset_id": "FD001",
+  "source_url": "https://phm-datasets.s3.amazonaws.com/NASA/6.+Turbofan+Engine+Degradation+Simulation+Data+Set.zip",
+  "download_timestamp_utc": "2026-10-05T16:12:14.480064+00:00",
+  "outer_archive_sha256": "c9c5dec12a945a82e8bb4446589d7fb3cc057b5e5d81fa1a12e25ee9912ad3b2",
+  "inner_archive_sha256": "74bef434a34db25c7bf72e668ea4cd52afe5f2cf8e44367c55a82bfd91a5a34f",
+  "citation": "A. Saxena and K. Goebel (2008), Turbofan Engine Degradation Simulation Data Set, NASA Prognostics Data Repository, NASA Ames Research Center.",
+  "terms": "NASA Open Data / Acknowledge repository and contributors (Saxena & Goebel 2008)",
+  "files": {
+    "readme.txt": {
+      "sha256": "4f5270554b775c67e73aff383c5436fd329d6e4cc3d3a116913276fae511269b",
+      "size_bytes": 2442,
+      "path": "data\\raw\\FD001\\readme.txt"
+    },
+    "RUL_FD001.txt": {
+      "sha256": "a19c8ec94931949d0485bdc35118206e9c81c4547b422efb9cf86f4ceddbceca",
+      "size_bytes": 429,
+      "path": "data\\raw\\FD001\\RUL_FD001.txt"
+    },
+    "test_FD001.txt": {
+      "sha256": "3cda7109ce17bafb5443f2ac926cfcf88154b941b8c4cf95eb55d1ddd6f52851",
+      "size_bytes": 2228855,
+      "path": "data\\raw\\FD001\\test_FD001.txt"
+    },
+    "train_FD001.txt": {
+      "sha256": "963b5e22825b34d8b21c69e1aeb4af3e647050eb672ee8834ba4b5d91d2de0f8",
+      "size_bytes": 3515356,
+      "path": "data\\raw\\FD001\\train_FD001.txt"
+    }
+  },
+  "hash_checks": {
+    "outer_archive": {
+      "expected_sha256": "c9c5dec12a945a82e8bb4446589d7fb3cc057b5e5d81fa1a12e25ee9912ad3b2",
+      "actual_sha256": "c9c5dec12a945a82e8bb4446589d7fb3cc057b5e5d81fa1a12e25ee9912ad3b2",
+      "matches": true
+    },
+    "train_FD001.txt": {
+      "expected_sha256": "963b5e22825b34d8b21c69e1aeb4af3e647050eb672ee8834ba4b5d91d2de0f8",
+      "actual_sha256": "963b5e22825b34d8b21c69e1aeb4af3e647050eb672ee8834ba4b5d91d2de0f8",
+      "matches": true
+    },
+    "test_FD001.txt": {
+      "expected_sha256": "3cda7109ce17bafb5443f2ac926cfcf88154b941b8c4cf95eb55d1ddd6f52851",
+      "actual_sha256": "3cda7109ce17bafb5443f2ac926cfcf88154b941b8c4cf95eb55d1ddd6f52851",
+      "matches": true
+    },
+    "RUL_FD001.txt": {
+      "expected_sha256": "a19c8ec94931949d0485bdc35118206e9c81c4547b422efb9cf86f4ceddbceca",
+      "actual_sha256": "a19c8ec94931949d0485bdc35118206e9c81c4547b422efb9cf86f4ceddbceca",
+      "matches": true
+    }
+  }
+}

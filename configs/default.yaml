@@ -1,0 +1,42 @@
+# TurbineGuard default configuration
+
+project:
+  name: "TurbineGuard"
+  version: "0.2.0"
+  seed: 42
+
+data:
+  dataset_id: "FD001"
+  raw_dir: "data/raw/FD001"
+  processed_dir: "data/processed"
+  source_manifest: "data/source_manifest.json"
+  quality_report: "reports/data_quality.json"
+  split_manifest: "data/processed/split_manifest.json"
+  snapshot_manifest: "data/processed/snapshot_manifest.json"
+  features_dev: "data/processed/features_dev.parquet"
+  features_val: "data/processed/features_val.parquet"
+  features_test: "data/processed/features_test.parquet"
+  
+splits:
+  dev_engines_count: 80
+  val_engines_count: 20
+  n_folds: 5
+  seed: 42
+  val_snapshot_offsets: [10, 30, 60, 90]
+  min_history_cycles: 20
+
+features:
+  window_size: 20
+  min_history: 20
+  target_cap: 125
+  high_rul_proxy_threshold: 100
+  near_failure_proxy_threshold: 30
+
+policy:
+  horizon_cycles: 30
+  capacity_fraction: 0.20
+  anomaly_percentile: 99.0
+
+models:
+  staging_dir: "models/staging"
+  tracking_uri: "sqlite:///mlruns.db"

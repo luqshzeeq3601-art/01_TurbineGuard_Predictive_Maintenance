@@ -32,3 +32,26 @@ jobs:
     - name: Run test suite
       run: |
         pytest -v
+
+  docker-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build portable release image
+        run: docker build -t turbineguard:ci .
+      - name: Start and verify actual inference
+        run: |
+          docker run -d --name turbineguard-ci -p 127.0.0.1:8000:8000 turbineguard:ci
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8000/ready; then break; fi
+            sleep 2
+          done
+          python scripts/smoke_api.py
+      - name: Logs and task-container cleanup
+        if: always()
+        run: |
+          docker logs turbineguard-ci || true
+          docker rm -f turbineguard-ci || true

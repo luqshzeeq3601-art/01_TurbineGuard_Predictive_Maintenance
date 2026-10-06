@@ -1,0 +1,2 @@
+# Frozen packaging-revision bytes must never undergo newline conversion.
+models/v0.2.1/** -text

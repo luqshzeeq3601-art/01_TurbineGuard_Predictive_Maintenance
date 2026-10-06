@@ -30,6 +30,11 @@ def compute_file_sha256(file_path: Path) -> str:
     return hasher.hexdigest()
 
 
+def _write_bundle_json(path: Path, value: dict) -> None:
+    """Write deterministic UTF-8/LF bytes before recording integrity hashes."""
+    path.write_bytes((json.dumps(value, indent=2, allow_nan=False) + "\n").encode("utf-8"))
+
+
 @dataclass
 class LoadedBundle:
     """Container for loaded and verified model bundle components."""
@@ -126,7 +131,7 @@ def freeze_model_bundle(
         },
         "sort_order": ["estimated_rul ASC", "anomaly_flag DESC", "unit_id ASC"],
     }
-    (bundle_dir / "policy.json").write_text(json.dumps(policy_dict, indent=2), encoding="utf-8")
+    _write_bundle_json(bundle_dir / "policy.json", policy_dict)
 
     # 3. Write feature_schema.json
     schema_dict = {
@@ -139,7 +144,7 @@ def freeze_model_bundle(
         "anomaly_feature_names": ano_meta["feature_names"],
         "constant_sensors_dropped": ["s01", "s05", "s10", "s16", "s18", "s19"],
     }
-    (bundle_dir / "feature_schema.json").write_text(json.dumps(schema_dict, indent=2), encoding="utf-8")
+    _write_bundle_json(bundle_dir / "feature_schema.json", schema_dict)
 
     # 4. Generate frozen monitoring reference features (80 dev engine snapshots)
     split_manifest = json.loads(Path(cfg.data.split_manifest).read_text(encoding="utf-8"))
@@ -183,7 +188,7 @@ def freeze_model_bundle(
         "feature_count": len(ref_feats.columns),
         "parquet_sha256": compute_file_sha256(ref_parquet_path),
     }
-    (bundle_dir / "reference_manifest.json").write_text(json.dumps(ref_manifest, indent=2), encoding="utf-8")
+    _write_bundle_json(bundle_dir / "reference_manifest.json", ref_manifest)
 
     # 5. Compute bundle file checksums and write metadata.json
     file_hashes = {}
@@ -214,10 +219,53 @@ def freeze_model_bundle(
         "split_manifest_hash": compute_file_sha256(Path(cfg.data.split_manifest)) if Path(cfg.data.split_manifest).exists() else None,
         "config_seed": cfg.project.seed,
     }
-    (bundle_dir / "metadata.json").write_text(json.dumps(metadata_dict, indent=2), encoding="utf-8")
+    _write_bundle_json(bundle_dir / "metadata.json", metadata_dict)
 
     logger.info(f"Successfully frozen model bundle {version} (status={promotion_status}) to {bundle_dir}")
     return bundle_dir
+
+
+def repackage_model_bundle(
+    source_dir: str | Path, destination_dir: str | Path, *, version: str
+) -> Path:
+    """Create a portable packaging revision without training or changing model weights.
+
+    The source must be a verified, trusted local bundle. Existing destinations are
+    never overwritten and the historical source is left byte-for-byte intact.
+    """
+    source = load_model_bundle(source_dir)
+    destination = Path(destination_dir)
+    if destination.exists():
+        raise FileExistsError(f"Packaging destination already exists: {destination}")
+    files = {
+        "rul_pipeline.joblib", "anomaly_pipeline.joblib", "policy.json",
+        "feature_schema.json", "monitoring_reference.parquet", "reference_manifest.json",
+    }
+    if set(source.metadata["file_hashes"]) != files:
+        raise ValueError("Source bundle must contain the complete expected file manifest")
+    destination.mkdir(parents=True)
+    for filename in sorted(files):
+        source_file = source.bundle_dir / filename
+        target_file = destination / filename
+        if filename.endswith(".json"):
+            _write_bundle_json(target_file, json.loads(source_file.read_bytes()))
+        else:
+            target_file.write_bytes(source_file.read_bytes())
+    metadata = dict(source.metadata)
+    metadata.update(
+        bundle_version=version,
+        file_hashes={name: compute_file_sha256(destination / name) for name in sorted(files)},
+        packaging_revision={
+            "source_bundle_version": source.version,
+            "source_metadata_sha256": compute_file_sha256(source.bundle_dir / "metadata.json"),
+            "model_weights_changed": False,
+            "created_at_utc": datetime.now(UTC).isoformat(),
+            "json_encoding": "UTF-8 with LF newlines",
+        },
+    )
+    _write_bundle_json(destination / "metadata.json", metadata)
+    load_model_bundle(destination)
+    return destination
 
 
 def load_model_bundle(bundle_dir: str | Path) -> LoadedBundle:

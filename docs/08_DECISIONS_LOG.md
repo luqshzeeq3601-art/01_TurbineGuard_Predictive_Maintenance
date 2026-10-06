@@ -86,3 +86,8 @@ Routine naming or formatting adjustments do not need a new decision. Data change
 - **Verification**: Clean pytest test suite execution and successful FastAPI `/health` and `/ready` checks.
 
 
+
+
+## 6 October 2026: remediation evidence decision
+
+Preserve the original models and evaluation records. Repairs address packaging, evidence generation or display without retuning against viewed outcomes. Portable same-weight v0.2.1 revision created; original v0.2.0 preserved. Required explanation, monitoring, API, parity and freeze tests now use isolated fixtures. Clean public export: 60 passed, 4 existing optional data checks skipped; Ruff clean. Docker startup is blocked by the host setup/error state; candidate CI and public hosting remain unverified.

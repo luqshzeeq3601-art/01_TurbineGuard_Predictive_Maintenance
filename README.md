@@ -1,7 +1,7 @@
 # TurbineGuard: Turbofan Predictive Maintenance & RUL Estimator
 
 [![CI](https://github.com/luqshzeeq3601-art/01_TurbineGuard_Predictive_Maintenance/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/luqshzeeq3601-art/01_TurbineGuard_Predictive_Maintenance/actions/workflows/ci.yml)
-[![Live API](https://img.shields.io/badge/API-Live%20on%20Render-46E3B7.svg?style=flat&logo=render&logoColor=white)](https://turbineguard-api.onrender.com/docs)
+[![Live API](https://img.shields.io/badge/API-Deployment%20pending-46E3B7.svg?style=flat&logo=render&logoColor=white)](https://turbineguard-api.onrender.com/docs)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![XGBoost](https://img.shields.io/badge/XGBoost-2.1+-EB5424.svg?style=flat)](https://xgboost.ai/)
@@ -14,7 +14,7 @@
 
 **TurbineGuard** is a production-grade predictive maintenance machine learning system for turbofan Remaining Useful Life (RUL) estimation, sensor anomaly isolation, and capacity-constrained maintenance worklist prioritization developed on the NASA C-MAPSS FD001 dataset.
 
-> **Operational Business Impact**: Under a capacity-constrained shop maintenance policy (top 20% shop slots), TurbineGuard **flags 76.0% of turbofans within 30 cycles of failure** while achieving **95.0% Precision@k** (19 of 20 scheduled engines are true near-failures, delivering a **3.80x lift** over random baseline inspection). In the critical near-failure zone ($RUL \le 30$), remaining useful life is estimated within **5.17 cycles MAE**, enabling proactive maintenance scheduling that eliminates unplanned turbine shutdowns while preventing wasted shop hours on healthy turbines.
+> **Operational Business Impact**: Under a capacity-constrained shop maintenance policy (top 20% shop slots), TurbineGuard **flags 76.0% of turbofans within 30 cycles of failure** while achieving **95.0% Precision@k** (19 of 20 scheduled engines are true near-failures, delivering a **3.80x lift** over random baseline inspection). In the critical near-failure zone ($RUL \le 30$), remaining useful life is estimated within **5.17 cycles MAE**, enabling proactive maintenance scheduling that supports offline inspection prioritisation; actual downtime and maintenance savings have not been measured.
 
 ---
 
@@ -69,7 +69,7 @@ All system milestones are strictly governed by reproducible cryptographic valida
 | **G4 Anomaly Promotion** | $\ge 30$ fitting engines, $\ge 10$ val engines, high-RUL macro false-flag rate $\le 5.0\%$ | **PASS** | 80 dev / 20 val engines, $0.54\%$ false-flag rate; [`reports/validation_metrics.json`](reports/validation_metrics.json) |
 | **G5 Engineering** | CLI vs API parity $\le 10^{-6}$ cycles, 59/59 pytest passing, ruff 0 errors, p95 $< 200\text{ ms}$ | **PASS** | [`reports/runtime.json`](reports/runtime.json), [`tests/test_batch.py`](tests/test_batch.py) |
 | **G6 Monitoring** | Evidently drift report, no-change baseline (0 drift), $+2\sigma$ shifted-sensor control detected | **PASS** | [`reports/drift/controls/control_results.json`](reports/drift/controls/control_results.json) |
-| **G7 Traceability** | Cryptographically signed model bundle receipts, full Model Card, frozen release bundle | **COMPLETE** | [`reports/official_test_metrics_v0.2.0.json`](reports/official_test_metrics_v0.2.0.json), [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) |
+| **G7 Traceability** | SHA-256 bundle integrity receipts, full Model Card, frozen release bundle | **COMPLETE** | [`reports/official_test_metrics_v0.2.0.json`](reports/official_test_metrics_v0.2.0.json), [`docs/MODEL_CARD.md`](docs/MODEL_CARD.md) |
 
 ---
 
@@ -80,16 +80,16 @@ All system milestones are strictly governed by reproducible cryptographic valida
 ========================================================================================
 EXPERIMENT COMPARISON (5-Fold Grouped CV across 80 Development Engines)
 ----------------------------------------------------------------------------------------
-E01: Dummy Regressor (Median)           | RMSE: 50.92 cycles (±0.85) | Baseline
-E02: Ridge Regression (Age-only)        | RMSE: 29.27 cycles (±0.67) | Baseline
-E03: Ridge Regression (Sensor-only)     | RMSE: 18.29 cycles (±0.61) | Baseline
-E04: XGBoost (Current values)           | RMSE: 16.87 cycles (±0.58) | Candidate
-E05: XGBoost (Current + Rolling-20)     | RMSE: 14.49 cycles (±0.59) | SELECTED CHAMPION
+E01: Dummy Regressor (Median)           | RMSE: 50.92 cycles (Â±0.85) | Baseline
+E02: Ridge Regression (Age-only)        | RMSE: 29.27 cycles (Â±0.67) | Baseline
+E03: Ridge Regression (Sensor-only)     | RMSE: 18.29 cycles (Â±0.61) | Baseline
+E04: XGBoost (Current values)           | RMSE: 16.87 cycles (Â±0.58) | Candidate
+E05: XGBoost (Current + Rolling-20)     | RMSE: 14.49 cycles (Â±0.59) | SELECTED CHAMPION
 ----------------------------------------------------------------------------------------
 DIAGNOSTIC RUNS
 ----------------------------------------------------------------------------------------
-E06: Champion without Cycle/Age         | RMSE: 15.41 cycles (±0.57) | Sensor-only signal
-E07: Champion with Uncapped Target      | RMSE: 18.84 cycles (±0.66) | Proves 125 cap value
+E06: Champion without Cycle/Age         | RMSE: 15.41 cycles (Â±0.57) | Sensor-only signal
+E07: Champion with Uncapped Target      | RMSE: 18.84 cycles (Â±0.66) | Proves 125 cap value
 ========================================================================================
 ```
 
@@ -259,14 +259,14 @@ python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 
 TurbineGuard is designed for zero-downtime, stateless container deployment on modern cloud platforms (Render, GCP Cloud Run, or Docker).
 
-### Live Public Service (Render Free Tier)
+### Configured Public Service (verification pending)
 The API service is configured for 1-click free-tier deployment on [Render](https://render.com) using the included [`render.yaml`](render.yaml) blueprint:
 
 - **Interactive OpenAPI Docs**: [`https://turbineguard-api.onrender.com/docs`](https://turbineguard-api.onrender.com/docs)
 - **Health Check Endpoint**: [`https://turbineguard-api.onrender.com/health`](https://turbineguard-api.onrender.com/health)
 - **Model Readiness Endpoint**: [`https://turbineguard-api.onrender.com/ready`](https://turbineguard-api.onrender.com/ready)
 
-#### Quick Live Query Example:
+#### Query Example After Deployment Verification:
 ```bash
 curl -X POST "https://turbineguard-api.onrender.com/predict" \
   -H "Content-Type: application/json" \
@@ -279,7 +279,7 @@ curl -X POST "https://turbineguard-api.onrender.com/predict" \
 ```
 
 ### Self-Contained Docker Run
-The container image embeds the audited `models/v0.2.0` bundle and enforces a non-root `appuser` execution profile:
+The container image embeds the portable `models/v0.2.1` packaging revision and enforces a non-root `appuser` execution profile:
 
 ```powershell
 # Build self-contained Docker container
@@ -306,55 +306,55 @@ export GCP_PROJECT_ID=your-gcp-project-id
 
 ```
 01_TurbineGuard_Predictive_Maintenance/
-├── api/                        # FastAPI service & strict Pydantic schemas
-│   ├── main.py
-│   └── schemas.py
-├── configs/                    # Experiment and dataset configuration
-│   └── default.yaml
-├── data/                       # Raw & processed NASA C-MAPSS datasets (gitignored)
-├── docs/                       # Specifications, PRD, architecture, and Model Card
-│   ├── 00_START_HERE.md        # Execution guide & index
-│   ├── 01_PROBLEM_AND_OBJECTIVES.md
-│   ├── 02_PRD.md               # Product requirements document
-│   ├── 03_DATA_SPEC.md         # Data contracts & leakage prevention rules
-│   ├── 04_TECHNICAL_DESIGN.md  # Software architecture & stack policy
-│   ├── 05_EXPERIMENT_PLAN.md   # Baseline, candidate & diagnostic protocols
-│   ├── 06_VALIDATION_AND_RELEASE.md # Gate definitions (G1–G7)
-│   ├── 07_OPERATIONS_AND_COMMANDS.md
-│   ├── 08_DECISIONS_LOG.md     # Architectural Decision Records (D001–D017)
-│   ├── 09_PROGRESS_LOG.md      # Detailed chronological session logs
-│   ├── 11_MODEL_PERFORMANCE_REVIEW.md
-│   ├── 12_IMPROVEMENT_PLAN.md  # Executed improvement plan
-│   └── MODEL_CARD.md           # Formal ML Model Card
-├── models/                     # Versioned immutable model bundles
-│   ├── v0.1.0/                 # Preserved historical audit baseline
-│   └── v0.2.0/                 # Clean promoted release candidate
-├── reports/                    # Quality reports, metrics, drift HTML, and runtime logs
-├── scripts/                    # Acquisition and runtime benchmarking scripts
-│   ├── download_data.py
-│   └── benchmark_runtime.py
-├── src/turbineguard/           # Core library package
-│   ├── anomaly.py              # 60-sensor Isolation Forest anomaly scoring
-│   ├── artifacts.py            # Model bundling & cryptographic validation
-│   ├── cli.py                  # CLI command dispatch
-│   ├── config.py               # YAML configuration loader
-│   ├── data.py                 # Ingestion & data quality checks
-│   ├── evaluate.py             # RUL & policy evaluation metrics
-│   ├── explain.py              # SHAP TreeExplainer attributions
-│   ├── features.py             # Causal rolling feature extraction
-│   ├── labels.py               # RUL labeling & anomaly proxy assignment
-│   ├── monitoring.py           # Evidently drift analysis & control checks
-│   ├── policy.py               # Inspection prioritization & capacity diagnostics
-│   ├── splits.py               # Grouped disjoint engine splits & manifests
-│   └── train.py                # Grouped CV training & champion selection
-└── tests/                      # Pytest suite (59 passing tests)
+â”œâ”€â”€ api/                        # FastAPI service & strict Pydantic schemas
+â”‚   â”œâ”€â”€ main.py
+â”‚   â””â”€â”€ schemas.py
+â”œâ”€â”€ configs/                    # Experiment and dataset configuration
+â”‚   â””â”€â”€ default.yaml
+â”œâ”€â”€ data/                       # Raw & processed NASA C-MAPSS datasets (gitignored)
+â”œâ”€â”€ docs/                       # Specifications, PRD, architecture, and Model Card
+â”‚   â”œâ”€â”€ 00_START_HERE.md        # Execution guide & index
+â”‚   â”œâ”€â”€ 01_PROBLEM_AND_OBJECTIVES.md
+â”‚   â”œâ”€â”€ 02_PRD.md               # Product requirements document
+â”‚   â”œâ”€â”€ 03_DATA_SPEC.md         # Data contracts & leakage prevention rules
+â”‚   â”œâ”€â”€ 04_TECHNICAL_DESIGN.md  # Software architecture & stack policy
+â”‚   â”œâ”€â”€ 05_EXPERIMENT_PLAN.md   # Baseline, candidate & diagnostic protocols
+â”‚   â”œâ”€â”€ 06_VALIDATION_AND_RELEASE.md # Gate definitions (G1â€“G7)
+â”‚   â”œâ”€â”€ 07_OPERATIONS_AND_COMMANDS.md
+â”‚   â”œâ”€â”€ 08_DECISIONS_LOG.md     # Architectural Decision Records (D001â€“D017)
+â”‚   â”œâ”€â”€ 09_PROGRESS_LOG.md      # Detailed chronological session logs
+â”‚   â”œâ”€â”€ 11_MODEL_PERFORMANCE_REVIEW.md
+â”‚   â”œâ”€â”€ 12_IMPROVEMENT_PLAN.md  # Executed improvement plan
+â”‚   â””â”€â”€ MODEL_CARD.md           # Formal ML Model Card
+â”œâ”€â”€ models/                     # Versioned immutable model bundles
+â”‚   â”œâ”€â”€ v0.1.0/                 # Preserved historical audit baseline
+â”‚   â””â”€â”€ v0.2.0/                 # Clean promoted release candidate
+â”œâ”€â”€ reports/                    # Quality reports, metrics, drift HTML, and runtime logs
+â”œâ”€â”€ scripts/                    # Acquisition and runtime benchmarking scripts
+â”‚   â”œâ”€â”€ download_data.py
+â”‚   â””â”€â”€ benchmark_runtime.py
+â”œâ”€â”€ src/turbineguard/           # Core library package
+â”‚   â”œâ”€â”€ anomaly.py              # 60-sensor Isolation Forest anomaly scoring
+â”‚   â”œâ”€â”€ artifacts.py            # Model bundling & cryptographic validation
+â”‚   â”œâ”€â”€ cli.py                  # CLI command dispatch
+â”‚   â”œâ”€â”€ config.py               # YAML configuration loader
+â”‚   â”œâ”€â”€ data.py                 # Ingestion & data quality checks
+â”‚   â”œâ”€â”€ evaluate.py             # RUL & policy evaluation metrics
+â”‚   â”œâ”€â”€ explain.py              # SHAP TreeExplainer attributions
+â”‚   â”œâ”€â”€ features.py             # Causal rolling feature extraction
+â”‚   â”œâ”€â”€ labels.py               # RUL labeling & anomaly proxy assignment
+â”‚   â”œâ”€â”€ monitoring.py           # Evidently drift analysis & control checks
+â”‚   â”œâ”€â”€ policy.py               # Inspection prioritization & capacity diagnostics
+â”‚   â”œâ”€â”€ splits.py               # Grouped disjoint engine splits & manifests
+â”‚   â””â”€â”€ train.py                # Grouped CV training & champion selection
+â””â”€â”€ tests/                      # Pytest suite (59 passing tests)
 ```
 
 ---
 
 ## 9. Known Limitations & Operational Boundaries
 
-1. **Near-Failure Recall Tradeoff**: 19 of 25 near-failure engines are captured in the top 20% inspection list (76.0% recall vs $\ge 80\%$ target). 5-fold CV residual analysis established that the 6 uncaught engines had true RULs of 21–29 cycles with predicted RULs of 30.4–45.3 due to gradual early degradation curves. Artificial offsets to force recall increase false alarms on healthy units.
+1. **Near-Failure Recall Tradeoff**: 19 of 25 near-failure engines are captured in the top 20% inspection list (76.0% recall vs $\ge 80\%$ target). 5-fold CV residual analysis established that the 6 uncaught engines had true RULs of 21â€“29 cycles with predicted RULs of 30.4â€“45.3 due to gradual early degradation curves. Artificial offsets to force recall increase false alarms on healthy units.
 2. **Piecewise Target Cap Plateau**: Healthy engines ($RUL > 125$) plateau near 125 cycles by design to focus capacity on near-failure urgency.
 3. **Single Operating Regime**: Specifically designed for sea-level static operation (C-MAPSS FD001); multi-regime operation (FD002/FD004) requires condition normalization.
 4. **Human Decision Support**: Designed for maintenance worklist ranking, not automated fly-by-wire actuator control.
@@ -365,3 +365,11 @@ export GCP_PROJECT_ID=your-gcp-project-id
 
 - **Dataset**: NASA C-MAPSS Turbofan Engine Degradation Simulation Dataset (FD001). Saxena, A., Goebel, K., Simon, D., & Eklund, N. (2008). *Damage Propagation Modeling for Aircraft Engine Run-to-Failure Simulation*. International Conference on Prognostics and Health Management.
 - **License**: Released under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Packaging revision v0.2.1
+
+The distributed inference bundle is now models/v0.2.1. It preserves the v0.2.0 model weights and policy while fixing JSON byte portability. The original release is retained for historical evaluation. New JSON is encoded as UTF-8/LF, and Git leaves this packaging revision byte-for-byte unchanged. The API and Docker default to v0.2.1.
+
+The clean public-source export passes 60 tests; four existing NASA/report integration checks remain optional when their data is absent. Candidate Docker smoke CI is configured; Linux image build/readiness/prediction passed; remote candidate execution remains pending. The advertised hosting URL is configuration, not current verified serving evidence.
+
+Public aggregate evaluation and local verification: [release summary](reports/release_v0.2.1_summary.json). Detailed machine-local outputs are regenerated by the documented pipeline rather than published.

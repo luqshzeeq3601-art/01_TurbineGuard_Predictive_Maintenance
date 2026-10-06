@@ -10,5 +10,6 @@ mlruns.db
 mlruns
 models/*
 !models/v0.2.0
+!models/v0.2.1
 .coverage
 htmlcov

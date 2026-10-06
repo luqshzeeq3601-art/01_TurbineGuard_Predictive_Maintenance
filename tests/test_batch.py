@@ -1,22 +1,18 @@
 """Parity and batch scoring tests between CLI and API."""
 
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from fastapi.testclient import TestClient
 
 from api.main import app
-from turbineguard.artifacts import load_model_bundle
-from turbineguard.data import load_raw_cmapss_file
 from turbineguard.predict import score_batch_history
 
 
-def test_cli_api_prediction_parity():
+def test_cli_api_prediction_parity(loaded_bundle, synthetic_history, portable_bundle_dir, monkeypatch):
     """Verify that CLI batch scoring and API endpoint return identical predictions."""
-    bundle_path = "models/v0.2.0" if Path("models/v0.2.0").exists() else "models/v0.1.0"
-    bundle = load_model_bundle(bundle_path)
-    test_raw = load_raw_cmapss_file("data/raw/FD001/test_FD001.txt", partition="test")
+    bundle = loaded_bundle
+    test_raw = synthetic_history
+    monkeypatch.setenv("TURBINEGUARD_BUNDLE_DIR", str(portable_bundle_dir))
     
     # Select first 5 engines
     sample_df = test_raw[test_raw["unit_id"].isin([1, 2, 3, 4, 5])].copy()

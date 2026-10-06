@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN useradd -m -u 1000 appuser
 
 # Copy lock and setup files
-COPY requirements.lock pyproject.toml /app/
+COPY requirements.lock pyproject.toml README.md /app/
 
 # Install locked dependencies and package
 RUN pip install --no-cache-dir -r requirements.lock
@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir -r requirements.lock
 COPY src /app/src
 COPY api /app/api
 COPY configs /app/configs
-COPY models/v0.2.0 /app/models/v0.2.0
+COPY models/v0.2.1 /app/models/v0.2.1
 
 RUN pip install --no-cache-dir --no-deps -e .
 
@@ -30,7 +30,7 @@ USER appuser
 
 EXPOSE 8000
 
-ENV TURBINEGUARD_BUNDLE_DIR=/app/models/v0.2.0 \
+ENV TURBINEGUARD_BUNDLE_DIR=/app/models/v0.2.1 \
     PYTHONUNBUFFERED=1
 
 CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]

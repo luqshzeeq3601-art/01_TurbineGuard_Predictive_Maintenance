@@ -253,3 +253,15 @@
 
 
 
+
+
+## 6 October 2026: portfolio remediation execution
+
+Portable same-weight v0.2.1 revision created; original v0.2.0 preserved. Required explanation, monitoring, API, parity and freeze tests now use isolated fixtures. Clean public export: 60 passed, 4 existing optional data checks skipped; Ruff clean. Docker startup is blocked by the host setup/error state; candidate CI and public hosting remain unverified.
+
+Evidence: local branch fix/portfolio-remediation; preserved originals and receipts under the workspace .portfolio-audit/2026-10-06/remediation folder. No remote push, merge, external post or cloud deployment was performed.
+
+
+### Container verification completed: 6 October 2026
+
+The repaired Linux image built, started, passed readiness and its functional inference/reorder/recommendation checks. Only task-owned containers were removed, and original model mounts were read-only. This supersedes the earlier local-Docker pending note. Candidate GitHub execution and public hosting remain pending. Evidence: workspace .portfolio-audit/2026-10-06/remediation/docker.

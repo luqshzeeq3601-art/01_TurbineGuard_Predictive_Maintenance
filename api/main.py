@@ -60,6 +60,8 @@ def get_default_bundle_path() -> Path:
     bundle_env = os.getenv("TURBINEGUARD_BUNDLE_DIR")
     if bundle_env:
         return Path(bundle_env)
+    if Path("models/v0.2.1").exists():
+        return Path("models/v0.2.1")
     if Path("models/v0.2.0").exists():
         return Path("models/v0.2.0")
     return Path("models/v0.1.0")

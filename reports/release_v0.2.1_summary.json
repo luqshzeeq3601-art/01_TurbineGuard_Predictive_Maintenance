@@ -1,0 +1,63 @@
+{
+  "dataset_id": "FD001",
+  "packaging_revision": "v0.2.1",
+  "measured_weights_release": "v0.2.0",
+  "model_weights_changed": false,
+  "n_test_engines": 100,
+  "holdout_metrics": {
+    "rmse": 16.20977086472626,
+    "mae": 12.018215227127076,
+    "bias": -1.6360031986236572,
+    "overestimate_rate": 0.51,
+    "overestimate_gt_10_rate": 0.19,
+    "nasa_score_total": 383.7093356002227,
+    "nasa_score_mean": 3.8370933560022267,
+    "band_metrics": {
+      "rul_le_30": {
+        "n_samples": 25,
+        "mae": 5.17433422088623,
+        "rmse": 6.9818062935259215,
+        "bias": 3.002068519592285,
+        "nasa_score_mean": 0.8408547469399926
+      },
+      "rul_31_to_100": {
+        "n_samples": 42,
+        "mae": 12.42449038369315,
+        "rmse": 15.876241947533943,
+        "bias": 3.8688549314226424,
+        "nasa_score_mean": 4.068372941559086
+      },
+      "rul_gt_100": {
+        "n_samples": 33,
+        "mae": 16.685896093195137,
+        "rmse": 20.940546589828845,
+        "bias": -12.155876968846176,
+        "nasa_score_mean": 5.812615253977009
+      }
+    }
+  },
+  "policy_diagnostics": {
+    "total_engines": 100,
+    "capacity_k": 20,
+    "actual_positives_count": 25,
+    "actual_prevalence": 0.25,
+    "selected_positives_count": 19,
+    "precision_at_k": 0.95,
+    "recall_at_k": 0.76,
+    "lift_over_prevalence": 3.8
+  },
+  "model_file_hashes": {
+    "anomaly_pipeline.joblib": "6e3661f89465ea1bf579bfbff4b850811551582eb2bf4ff2b7d03cff00a9cfb9",
+    "rul_pipeline.joblib": "3c2ca20b548faee58b39954964866ba848c3b029cfe298730a8630a992b4cbfc"
+  },
+  "local_verification": {
+    "windows_tests_passed": 64,
+    "linux_tests_passed": 60,
+    "optional_data_checks_skipped": 4,
+    "docker_readiness_and_prediction": "passed"
+  },
+  "limitations": [
+    "No measured real equipment downtime or financial savings",
+    "Candidate GitHub CI and public hosting pending"
+  ]
+}

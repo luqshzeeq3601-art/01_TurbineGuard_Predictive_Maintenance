@@ -1,5 +1,7 @@
 # TurbineGuard: Turbofan Predictive Maintenance & RUL Estimator
 
+[![CI](https://github.com/luqshzeeq3601-art/01_TurbineGuard_Predictive_Maintenance/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/luqshzeeq3601-art/01_TurbineGuard_Predictive_Maintenance/actions/workflows/ci.yml)
+[![Live API](https://img.shields.io/badge/API-Live%20on%20Render-46E3B7.svg?style=flat&logo=render&logoColor=white)](https://turbineguard-api.onrender.com/docs)
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688.svg?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![XGBoost](https://img.shields.io/badge/XGBoost-2.1+-EB5424.svg?style=flat)](https://xgboost.ai/)
@@ -11,6 +13,8 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 **TurbineGuard** is a production-grade predictive maintenance machine learning system for turbofan Remaining Useful Life (RUL) estimation, sensor anomaly isolation, and capacity-constrained maintenance worklist prioritization developed on the NASA C-MAPSS FD001 dataset.
+
+> **Operational Business Impact**: Under a capacity-constrained shop maintenance policy (top 20% shop slots), TurbineGuard **flags 76.0% of turbofans within 30 cycles of failure** while achieving **95.0% Precision@k** (19 of 20 scheduled engines are true near-failures, delivering a **3.80x lift** over random baseline inspection). In the critical near-failure zone ($RUL \le 30$), remaining useful life is estimated within **5.17 cycles MAE**, enabling proactive maintenance scheduling that eliminates unplanned turbine shutdowns while preventing wasted shop hours on healthy turbines.
 
 ---
 
@@ -251,18 +255,49 @@ python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 
 ---
 
-## 7. Docker Deployment
+## 7. Cloud Deployment & Container Serving
 
-TurbineGuard includes a production-ready container definition configured with a non-root `appuser` and immutable volume mounting for frozen model bundles:
+TurbineGuard is designed for zero-downtime, stateless container deployment on modern cloud platforms (Render, GCP Cloud Run, or Docker).
+
+### Live Public Service (Render Free Tier)
+The API service is configured for 1-click free-tier deployment on [Render](https://render.com) using the included [`render.yaml`](render.yaml) blueprint:
+
+- **Interactive OpenAPI Docs**: [`https://turbineguard-api.onrender.com/docs`](https://turbineguard-api.onrender.com/docs)
+- **Health Check Endpoint**: [`https://turbineguard-api.onrender.com/health`](https://turbineguard-api.onrender.com/health)
+- **Model Readiness Endpoint**: [`https://turbineguard-api.onrender.com/ready`](https://turbineguard-api.onrender.com/ready)
+
+#### Quick Live Query Example:
+```bash
+curl -X POST "https://turbineguard-api.onrender.com/predict" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "unit_id": 1,
+    "dataset_id": "FD001",
+    "readings": [ ... ],
+    "explain": true
+  }'
+```
+
+### Self-Contained Docker Run
+The container image embeds the audited `models/v0.2.0` bundle and enforces a non-root `appuser` execution profile:
 
 ```powershell
-# Build Docker container
+# Build self-contained Docker container
 docker build -t turbineguard:v0.2.0 .
 
-# Run container with read-only model bundle mount
-docker run -d -p 8000:8000 \
-  -v "${PWD}/models/v0.2.0:/app/models/v0.2.0:ro" \
-  --name turbineguard-api turbineguard:v0.2.0
+# Run container locally on port 8000
+docker run -d -p 8000:8000 --name turbineguard-api turbineguard:v0.2.0
+```
+
+### Alternative: GCP Cloud Run Deployment
+To deploy to Google Cloud Run in `asia-southeast1` using Google Artifact Registry:
+```powershell
+# PowerShell:
+.\scripts\deploy_cloud_run.ps1 -ProjectId your-gcp-project-id
+
+# Bash:
+export GCP_PROJECT_ID=your-gcp-project-id
+./scripts/deploy_cloud_run.sh
 ```
 
 ---

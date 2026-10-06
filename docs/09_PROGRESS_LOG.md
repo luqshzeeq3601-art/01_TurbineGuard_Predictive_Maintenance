@@ -224,6 +224,31 @@
 - Blockers: None.
 - Next ready task: Improvement plan is complete. Project is in fully verified, reproducible release candidate state.
 
+## 2026-10-06 - GitHub Actions CI, Free-Tier Render Deployment, and Business Impact Framing
+- Summary: Migrated CI workflow to `.github/workflows/ci.yml`, configured Render free-tier deployment blueprint, tracked frozen production bundle `models/v0.2.0/` in git, and added empirical operational business impact statement to README.
+- Files changed:
+  - `.github/workflows/ci.yml` (new GitHub Actions workflow)
+  - `ci/ci.yml` (removed)
+  - `.gitignore` (un-ignored `models/v0.2.0/`)
+  - `.dockerignore` (allowed `models/v0.2.0`)
+  - `Dockerfile` (copies `models/v0.2.0` into self-contained container)
+  - `render.yaml` (new Render blueprint specification)
+  - `scripts/deploy_cloud_run.sh`, `scripts/deploy_cloud_run.ps1` (new GCP deployment scripts)
+  - `README.md` (CI badge, Live API badge, operational impact quote, cloud deployment section)
+  - `docs/08_DECISIONS_LOG.md` (Decision D018)
+  - `docs/09_PROGRESS_LOG.md` (this entry)
+- Verification commands executed:
+  - `pytest -v` (59 passed in ~21s)
+  - `ruff check src tests api` (0 errors)
+  - `git status` (clean untracked status for models/v0.2.0 and .github)
+- Observed outcomes:
+  - GitHub Actions will automatically execute linting and tests on push/PR to `main`.
+  - Render blueprint enables zero-friction free-tier web deployment at `https://turbineguard-api.onrender.com`.
+  - Grounded business impact statement prominently documents 76.0% near-failure capture, 95.0% Precision@k, and 3.80x lift under 20% shop constraint.
+- Blockers: None.
+- Next ready task: Push commits to GitHub remote and connect repository on Render dashboard.
+
+
 
 
 

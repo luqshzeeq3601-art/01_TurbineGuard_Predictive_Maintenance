@@ -1,0 +1,17 @@
+{
+  "policy_version": "1.0",
+  "horizon_cycles": 30,
+  "capacity_fraction": 0.2,
+  "anomaly_cutoff": 0.5111917326927247,
+  "anomaly_score_direction": "higher_is_more_anomalous",
+  "priority_rules": {
+    "review_soon": "within_horizon == True",
+    "investigate": "within_horizon == False and anomaly_flag == True",
+    "routine_review": "otherwise"
+  },
+  "sort_order": [
+    "estimated_rul ASC",
+    "anomaly_flag DESC",
+    "unit_id ASC"
+  ]
+}

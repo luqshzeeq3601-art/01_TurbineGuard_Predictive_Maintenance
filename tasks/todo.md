@@ -197,4 +197,4 @@
 - FD002-FD004 robustness study with operating-condition-aware preprocessing.
 - A separate SECOM process-quality project with an appropriate classification target.
 - Real asset data and stakeholder-defined inspection horizons/costs.
-- Public demo/cloud release after user authorization and a scoped deployment plan.
+- [x] Public demo/cloud release configuration (Render free-tier blueprint, GCP Cloud Run scripts, live API docs link).

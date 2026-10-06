@@ -1,0 +1,39 @@
+{
+  "bundle_version": "v0.2.0",
+  "dataset_id": "FD001",
+  "frozen_timestamp_utc": "2026-10-05T17:18:44.495157+00:00",
+  "champion_experiment_id": "E05",
+  "model_family": "xgboost",
+  "promotion_status": "promoted",
+  "validation_gates": {
+    "G3_RUL_promotion": {
+      "outcome": "PASS",
+      "criteria": "Nonconstant model >=10% better RMSE than E01 and E02",
+      "champion_rmse": 14.480724329699056,
+      "improvement_vs_e01_pct": 71.3743641026014,
+      "improvement_vs_e02_pct": 44.24396539616717
+    },
+    "G4_Anomaly_promotion": {
+      "outcome": "PASS",
+      "criteria": ">=30 fitting engines, >=10 val proxy engines, high-RUL macro false-flag rate <=5%",
+      "fitting_engines": 80,
+      "val_high_proxy_engines": 20,
+      "high_proxy_macro_false_flag_rate": 0.005431955093099671
+    }
+  },
+  "file_hashes": {
+    "rul_pipeline.joblib": "3c2ca20b548faee58b39954964866ba848c3b029cfe298730a8630a992b4cbfc",
+    "anomaly_pipeline.joblib": "6e3661f89465ea1bf579bfbff4b850811551582eb2bf4ff2b7d03cff00a9cfb9",
+    "policy.json": "644383e542637de00313ad7ae9336f0e179b26e478fdbc1183b50acc3c26c1b5",
+    "feature_schema.json": "0c0ac7e35a699d20b4e71d20710bc8c6673c37a2440a62a1f66f2d575f373efa",
+    "monitoring_reference.parquet": "d36cd1db2168b1112c55f725743c1a39ed4f0fdebf8176383daa6807c8c3d92d",
+    "reference_manifest.json": "d35af0ed7c91eb7f68c6a90d31450813c904b70403310a265974fd2eda270245"
+  },
+  "staged_model_hashes": {
+    "rul_pipeline_sha256": "3c2ca20b548faee58b39954964866ba848c3b029cfe298730a8630a992b4cbfc",
+    "anomaly_pipeline_sha256": "6e3661f89465ea1bf579bfbff4b850811551582eb2bf4ff2b7d03cff00a9cfb9"
+  },
+  "source_manifest_hash": "b430872c64bf5ded185f3b3dad62bcdc24aed56446e5ceba356dc59dad613693",
+  "split_manifest_hash": "b822c416fcec0e3587d1df921dc0947b54403d1e697f9017b792099c38c24507",
+  "config_seed": 42
+}

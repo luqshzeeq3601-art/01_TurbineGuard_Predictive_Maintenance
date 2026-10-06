@@ -76,3 +76,13 @@ Routine naming or formatting adjustments do not need a new decision. Data change
 - **Documents changed**: `docs/12_IMPROVEMENT_PLAN.md`, `docs/MODEL_CARD.md`, `README.md`.
 - **Verification**: Grouped CV residual analysis documented in session logs.
 
+### D018: Track Frozen Model Release v0.2.0 in Git and Configure Free-Tier Render Deployment
+- **Date**: 2026-10-06
+- **Question**: How should the production FastAPI service be deployed and served on a free-tier cloud platform without requiring local host mounts or external storage dependencies?
+- **Evidence examined**: Following ChurnGuard Decision D-017, the frozen release candidate bundle `models/v0.2.0/` is small (~3.0 MB across joblib, parquet, and JSON metadata), static, and cryptographically verified. Tracking it directly in git enables reproducible Docker container builds, automated GitHub Actions testing, and 1-click free-tier Render deployment.
+- **Decision**: Update `.gitignore` and `.dockerignore` to track `models/v0.2.0/` while keeping intermediate/staging model artifacts ignored. Update `Dockerfile` to copy `models/v0.2.0` into the container. Add `render.yaml` for Render free-tier deployment and provide GCP Cloud Run deployment automation scripts. Move CI workflow to `.github/workflows/ci.yml`.
+- **Effect on requirements/data/protocol**: Enables zero-friction cloud deployment and live Swagger documentation (`https://turbineguard-api.onrender.com/docs`).
+- **Documents changed**: `.gitignore`, `.dockerignore`, `Dockerfile`, `render.yaml`, `.github/workflows/ci.yml`, `README.md`, `scripts/deploy_cloud_run.*`.
+- **Verification**: Clean pytest test suite execution and successful FastAPI `/health` and `/ready` checks.
+
+

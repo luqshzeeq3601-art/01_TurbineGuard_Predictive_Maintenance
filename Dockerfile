@@ -21,6 +21,7 @@ RUN pip install --no-cache-dir -r requirements.lock
 COPY src /app/src
 COPY api /app/api
 COPY configs /app/configs
+COPY models/v0.2.0 /app/models/v0.2.0
 
 RUN pip install --no-cache-dir --no-deps -e .
 

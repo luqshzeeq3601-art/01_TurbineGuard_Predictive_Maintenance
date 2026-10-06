@@ -44,7 +44,9 @@ htmlcov/
 # Local data, models, reports, tracking
 data/raw/
 data/processed/
-models/
+models/*
+!models/v0.2.0/
+!models/v0.2.0/**
 reports/
 mlruns/
 mlruns.db

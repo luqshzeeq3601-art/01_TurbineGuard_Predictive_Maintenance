@@ -39,9 +39,13 @@ def test_synthetic_fitting_does_not_modify_staging(tmp_path):
                 assert compute_file_sha256(f) == staging_hashes_before[f.name]
 
 
-def test_freeze_rejects_overwriting_existing_frozen_bundle(tmp_path):
+def test_freeze_rejects_overwriting_existing_frozen_bundle(tmp_path, monkeypatch):
     """Ensure freeze_model_bundle refuses to overwrite an existing frozen version."""
     # Create dummy bundle in tmp_path
+    monkeypatch.chdir(tmp_path)
+    configs = tmp_path / "configs"
+    configs.mkdir()
+    (configs / "default.yaml").write_text("{}", encoding="utf-8")
     bundle_ver = "v_test_freeze"
     bundle_dir = Path("models") / bundle_ver
     bundle_dir.mkdir(parents=True, exist_ok=True)
@@ -59,8 +63,13 @@ def test_freeze_rejects_overwriting_existing_frozen_bundle(tmp_path):
             bundle_dir.rmdir()
 
 
-def test_promotion_status_requires_both_g3_and_g4_pass(tmp_path):
+@pytest.mark.parametrize("g3,g4,expected", [
+    ("PASS", "PASS", "promoted"), ("PASS", "FAIL", "experimental"),
+    ("FAIL", "PASS", "experimental"), ("FAIL", "FAIL", "experimental"),
+])
+def test_promotion_status_requires_both_g3_and_g4_pass(isolated_freeze_inputs, g3, g4, expected):
     """Verify that promotion_status is 'promoted' ONLY when both G3 and G4 are PASS."""
+    tmp_path = isolated_freeze_inputs
     staging_dir = tmp_path / "staging"
     staging_dir.mkdir(parents=True, exist_ok=True)
 
@@ -101,8 +110,8 @@ def test_promotion_status_requires_both_g3_and_g4_pass(tmp_path):
             "anomaly_pipeline_sha256": compute_file_sha256(ano_path),
         },
         "gates": {
-            "G3_RUL_promotion": {"outcome": "PASS"},
-            "G4_Anomaly_promotion": {"outcome": "FAIL"},
+            "G3_RUL_promotion": {"outcome": g3},
+            "G4_Anomaly_promotion": {"outcome": g4},
         },
     }
     val_path = Path("reports/validation_metrics.json")
@@ -122,7 +131,7 @@ def test_promotion_status_requires_both_g3_and_g4_pass(tmp_path):
         meta = json.loads((frozen_p / "metadata.json").read_text(encoding="utf-8"))
 
         # Since G4 failed, promotion status MUST be experimental
-        assert meta["promotion_status"] == "experimental"
+        assert meta["promotion_status"] == expected
 
     finally:
         # Cleanup

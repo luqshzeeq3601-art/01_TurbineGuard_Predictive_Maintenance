@@ -3,15 +3,8 @@
 import json
 
 import pandas as pd
-import pytest
 
-from turbineguard.artifacts import load_model_bundle
 from turbineguard.monitoring import run_drift_analysis, run_drift_controls
-
-
-@pytest.fixture
-def loaded_bundle():
-    return load_model_bundle("models/v0.1.0")
 
 
 def test_monitoring_reference_exists(loaded_bundle):

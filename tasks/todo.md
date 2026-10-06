@@ -198,3 +198,13 @@
 - A separate SECOM process-quality project with an appropriate classification target.
 - Real asset data and stakeholder-defined inspection horizons/costs.
 - [x] Public demo/cloud release configuration (Render free-tier blueprint, GCP Cloud Run scripts, live API docs link).
+
+
+## Portfolio remediation: 6 October 2026
+
+Portable same-weight v0.2.1 revision created; original v0.2.0 preserved. Required explanation, monitoring, API, parity and freeze tests now use isolated fixtures. Clean public export: 60 passed, 4 existing optional data checks skipped; Ruff clean. Docker startup is blocked by the host setup/error state; candidate CI and public hosting remain unverified.
+
+- [x] Verified local remediation evidence recorded.
+- [ ] Remaining applicable runtime/publication/hosting gates verified.
+
+- [x] Actual Linux container build/readiness/functional verification completed locally.

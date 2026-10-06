@@ -5,9 +5,9 @@ services:
     plan: free
     region: singapore
     dockerfilePath: Dockerfile
-    healthCheckPath: /health
+    healthCheckPath: /ready
     envVars:
       - key: PORT
         value: 8000
       - key: TURBINEGUARD_BUNDLE_DIR
-        value: /app/models/v0.2.0
+        value: /app/models/v0.2.1

@@ -7,7 +7,8 @@ from api.main import app, bundle_state
 
 
 @pytest.fixture
-def client():
+def client(portable_bundle_dir, monkeypatch):
+    monkeypatch.setenv("TURBINEGUARD_BUNDLE_DIR", str(portable_bundle_dir))
     with TestClient(app) as test_client:
         yield test_client
 

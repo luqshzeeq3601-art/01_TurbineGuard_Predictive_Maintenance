@@ -1,0 +1,12 @@
+{
+  "n_engines": 80,
+  "sampling_policy": "one_snapshot_per_development_engine",
+  "offsets_used": [
+    10,
+    30,
+    60,
+    90
+  ],
+  "feature_count": 95,
+  "parquet_sha256": "d36cd1db2168b1112c55f725743c1a39ed4f0fdebf8176383daa6807c8c3d92d"
+}

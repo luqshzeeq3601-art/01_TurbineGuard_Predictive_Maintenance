@@ -1,20 +1,12 @@
 """Unit and regression tests for SHAP model explanations."""
 
-import pytest
-
-from turbineguard.artifacts import load_model_bundle
 from turbineguard.explain import explain_batch_features, explain_prediction_sample
-from turbineguard.predict import load_and_validate_input_file, score_batch_history
+from turbineguard.predict import score_batch_history
 
 
-@pytest.fixture
-def loaded_bundle():
-    return load_model_bundle("models/v0.1.0")
-
-
-def test_single_engine_shap_explanation(loaded_bundle):
+def test_single_engine_shap_explanation(loaded_bundle, synthetic_history):
     # Load test data and score
-    test_df = load_and_validate_input_file("data/raw/FD001/test_FD001.txt", input_format="cmapss")
+    test_df = synthetic_history
     engine_1 = test_df[test_df["unit_id"] == 1]
     
     _, latest_feats = score_batch_history(loaded_bundle, engine_1)
@@ -34,8 +26,8 @@ def test_single_engine_shap_explanation(loaded_bundle):
         assert feat["effect"] in ["increases_estimated_rul", "decreases_estimated_rul"]
 
 
-def test_batch_shap_explanations(loaded_bundle):
-    test_df = load_and_validate_input_file("data/raw/FD001/test_FD001.txt", input_format="cmapss")
+def test_batch_shap_explanations(loaded_bundle, synthetic_history):
+    test_df = synthetic_history
     first_5_engines = test_df[test_df["unit_id"].isin([1, 2, 3, 4, 5])]
     
     _, latest_feats = score_batch_history(loaded_bundle, first_5_engines)

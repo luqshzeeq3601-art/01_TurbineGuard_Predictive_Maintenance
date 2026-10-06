@@ -265,3 +265,11 @@ Evidence: local branch fix/portfolio-remediation; preserved originals and receip
 ### Container verification completed: 6 October 2026
 
 The repaired Linux image built, started, passed readiness and its functional inference/reorder/recommendation checks. Only task-owned containers were removed, and original model mounts were read-only. This supersedes the earlier local-Docker pending note. Candidate GitHub execution and public hosting remain pending. Evidence: workspace .portfolio-audit/2026-10-06/remediation/docker.
+
+## 6 October 2026: public README and workflow-image polish
+
+User-authorized work: polish the public README and generate a useful modern light-theme workflow image. README now leads with purpose, the diagram, traceable measured results, runnable setup/demo commands, API or CLI interfaces, verification, limitations and data/license boundaries. Removed stale live-service claims, machine-specific setup paths and unavailable public evidence links. Added docs/assets/workflow.png and its reviewed generation prompt in docs/assets/workflow.md.
+
+Verification: README/asset links resolve to public files; high-confidence publication signature/path checks found no issue; source-only exports passed the documented demo checks. Rendered previews load their images on a white background with no page overflow. A separate read-only review checked source/diagram consistency and identified the portable Windows-marker/test-prerequisite corrections, which are included where applicable. FraudGuard's full synthetic preparation and 50 tests passed in a disposable export. Original trained models, source data and frozen evaluation figures are unchanged.
+
+Earlier remediation commit and GitHub workflow proof is available in PR 1; this documentation commit is authorized for the same branch and draft PR. Final candidate CI status is recorded by the PR checks. Public hosting remains open for projects 1–5; ExperimentGuard does not require model serving in V1. No merge or cloud deployment is included. Next public-delivery task: confirm provider/account/artifact inputs, then verify actual public endpoints.
